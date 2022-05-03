@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useContext } from "react";
+import { auth } from "./firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
+import "./App.css";
+import FormSignup from "./components/form-signup/FormSignup.component";
 
 function App() {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // add setUser
+      } else {
+        //user is signed out
+      }
+    });
+    return unsubscribe;
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <FormSignup />
     </div>
   );
 }
