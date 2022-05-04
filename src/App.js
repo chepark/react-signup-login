@@ -9,6 +9,7 @@ import FormSignup from "./components/form-signup/FormSignup.component";
 import FormLogin from "./components/form-login/FormLogin.component";
 import Dashboard from "./components/dashboard/Dashboard.component";
 import Logout from "./components/logout/Logout.component";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   useEffect(() => {
@@ -26,7 +27,9 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Dashboard />} />
+          </Route>
           <Route path="/signup" element={<FormSignup />} />
           <Route path="/login" element={<FormLogin />} />
           <Route path="/logout" element={<Logout />} />
