@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import FormInput from "../form-input/FormInput.component";
 import { login, signupWithFacebook, signupWithGoogle } from "../../api/AuthApi";
 import { useAuth } from "../../contexts";
@@ -12,6 +14,7 @@ const FormLogin = () => {
 
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useAuth();
+  let navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +27,7 @@ const FormLogin = () => {
     login(values.email, values.password, (val) => {
       dispatch(val);
       setLoading(false);
+      navigate("/", { replace: true });
     });
 
     setLoading(true);
@@ -34,6 +38,7 @@ const FormLogin = () => {
 
     signupWithFacebook((val) => {
       dispatch(val);
+      navigate("/", { replace: true });
     });
   };
 
@@ -41,6 +46,7 @@ const FormLogin = () => {
     e.preventDefault();
     signupWithGoogle((val) => {
       dispatch(val);
+      navigate("/", { replace: true });
     });
   };
 
