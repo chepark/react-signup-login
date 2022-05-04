@@ -1,11 +1,20 @@
 import { auth } from "../firebase/firebase";
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   FacebookAuthProvider,
   GoogleAuthProvider,
+  signOut,
 } from "firebase/auth";
-import { SIGNUP_SUCCESS, SIGNUP_FAIL } from "../reducers/types";
+import {
+  SIGNUP_SUCCESS,
+  SIGNUP_FAIL,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAIL,
+} from "../reducers/types";
 
 const dispatchAction = (callback, type, payload) => {
   const action = { type, payload };
@@ -57,5 +66,26 @@ export const signupWithGoogle = (cb) => {
     .catch((error) => {
       const credential = GoogleAuthProvider.credentialFromError(error);
       dispatchAction(cb, SIGNUP_FAIL, error);
+    });
+};
+
+export const login = (email, password, cb) => {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      dispatchAction(cb, LOGIN_SUCCESS, user);
+    })
+    .catch((error) => {
+      dispatchAction(cb, LOGIN_FAIL, error);
+    });
+};
+
+export const logout = (cb) => {
+  signOut(auth)
+    .then(() => {
+      dispatchAction(cb, LOGOUT_SUCCESS);
+    })
+    .catch((error) => {
+      dispatchAction(cb, LOGOUT_FAIL, error);
     });
 };
