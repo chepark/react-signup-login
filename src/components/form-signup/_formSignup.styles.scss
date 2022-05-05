@@ -1,0 +1,66 @@
+@import "../../styles/variables.scss";
+
+.form-signup-container {
+  border: 1px solid brown;
+  min-width: 300px;
+
+  padding-top: 4rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.form-header {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.form-button {
+  width: 100%;
+  margin: 15px 0;
+  border-style: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  background-color: $color-primary;
+  color: $font-color-white;
+}
+
+.line {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid $color-inactive;
+  line-height: 0.1em;
+  margin: 10px 0 20px;
+  span {
+    background: #fff;
+    padding: 0 10px;
+    color: $color-inactive;
+  }
+}
+
+.social-signup {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    margin: 0px;
+  }
+
+  .google-signup {
+    margin-top: 10px;
+  }
+}
+
+.form-error {
+  font-size: 0.8em;
+  color: $color-alert-error;
+  margin-top: 5px;
+}

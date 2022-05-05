@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { auth } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
-import "./App.css";
+import "./App.scss";
 import FormSignup from "./components/form-signup/FormSignup.component";
 import FormLogin from "./components/form-login/FormLogin.component";
 import Dashboard from "./components/dashboard/Dashboard.component";

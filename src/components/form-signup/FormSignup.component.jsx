@@ -8,7 +8,7 @@ import {
   signupWithGoogle,
 } from "../../api/AuthApi";
 import { useAuth } from "../../contexts";
-import { isSignInWithEmailLink } from "firebase/auth";
+import "./_formSignup.styles.scss";
 
 const FormSignup = () => {
   const [values, setValues] = useState({
@@ -20,22 +20,26 @@ const FormSignup = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState();
   const { state, dispatch } = useAuth();
+
   let navigate = useNavigate();
 
   const validateInputs = () => {
     let isError = {};
 
     if (values.username.length < 4)
-      isError.username = "At least 4 characaters required";
+      isError.username = "At least 4 characaters required.";
+    else if (values.username === "")
+      isError.username = "User name is required.";
 
     if (!/\S+@\S+\.\S+/.test(values.email))
-      isError.email = "Email address is invalid";
+      isError.email = "Email address is invalid.";
+    else if (values.email === "") isError.email = "Email is required.";
 
     if (values.password.length < 6)
-      isError.password = "Atleast 6 characaters required";
+      isError.password = "At least 6 characaters required.";
 
     if (values.password2 !== values.password)
-      isError.password2 = "Passwords do not match";
+      isError.password2 = "Passwords do not match.";
 
     if (Object.keys(isError).length > 0) {
       setErrors(isError);
@@ -56,7 +60,7 @@ const FormSignup = () => {
     signup(values.email, values.password, (val) => {
       dispatch(val);
       setLoading(false);
-      navigate("/", { replace: true });
+      // navigate("/", { replace: true });
     });
 
     setLoading(true);
@@ -81,12 +85,8 @@ const FormSignup = () => {
 
   return (
     <div className="form-signup-container">
+      <h2 className="form-header">Sign Up</h2>
       <form className="form-signup" noValidate onSubmit={handleSubmit}>
-        {errors && errors.username ? (
-          <p className="form-error">{errors.username}</p>
-        ) : (
-          ""
-        )}
         <FormInput
           label="User Name"
           type="text"
@@ -95,11 +95,12 @@ const FormSignup = () => {
           value={values.username}
           onChange={handleChange}
         />
-        {errors && errors.email ? (
-          <p className="form-error">{errors.email}</p>
+        {errors && errors.username ? (
+          <p className="form-error">*{errors.username}</p>
         ) : (
           ""
         )}
+
         <FormInput
           label="Email"
           type="email"
@@ -108,11 +109,12 @@ const FormSignup = () => {
           value={values.email}
           onChange={handleChange}
         />
-        {errors && errors.password ? (
-          <p className="form-error">{errors.password}</p>
+        {errors && errors.email ? (
+          <p className="form-error">*{errors.email}</p>
         ) : (
           ""
         )}
+
         <FormInput
           label="Password"
           type="text"
@@ -121,29 +123,46 @@ const FormSignup = () => {
           value={values.password}
           onChange={handleChange}
         />
-        {errors && errors.password2 ? (
-          <p className="form-error">{errors.password2}</p>
+        {errors && errors.password ? (
+          <p className="form-error">*{errors.password}</p>
         ) : (
           ""
         )}
         <FormInput
-          label="Password2"
+          label="Confirm Password"
           type="text"
           required
           name="password2"
           value={values.password2}
           onChange={handleChange}
         />
-        <button type="submit" disabled={loading}>
+        {errors && errors.password2 ? (
+          <p className="form-error">*{errors.password2}</p>
+        ) : (
+          ""
+        )}
+        <button
+          className="form-button button-submit"
+          type="submit"
+          disabled={loading}
+        >
           Sign Up
         </button>
       </form>
-
+      <div className="line">
+        <span>or</span>
+      </div>
       <div className="social-signup">
-        <button className="facebook-signup" onClick={handleClickFacebookSignUp}>
+        <button
+          className="form-button facebook-signup"
+          onClick={handleClickFacebookSignUp}
+        >
           Sign Up with Facebook
         </button>
-        <button className="google-signup" onClick={handleClickGoogleSignup}>
+        <button
+          className="form-button google-signup"
+          onClick={handleClickGoogleSignup}
+        >
           Sign Up with Google
         </button>
       </div>
