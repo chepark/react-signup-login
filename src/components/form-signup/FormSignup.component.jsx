@@ -8,6 +8,7 @@ import {
   signupWithGoogle,
 } from "../../api/AuthApi";
 import { useAuth } from "../../contexts";
+import { isSignInWithEmailLink } from "firebase/auth";
 
 const FormSignup = () => {
   const [values, setValues] = useState({
@@ -17,8 +18,30 @@ const FormSignup = () => {
     password2: "",
   });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState();
   const { state, dispatch } = useAuth();
   let navigate = useNavigate();
+
+  const validateInputs = () => {
+    let isError = {};
+
+    if (values.username.length < 4)
+      isError.username = "At least 4 characaters required";
+
+    if (!/\S+@\S+\.\S+/.test(values.email))
+      isError.email = "Email address is invalid";
+
+    if (values.password.length < 6)
+      isError.password = "Atleast 6 characaters required";
+
+    if (values.password2 !== values.password)
+      isError.password2 = "Passwords do not match";
+
+    if (Object.keys(isError).length > 0) {
+      setErrors(isError);
+      return false;
+    } else return true;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,6 +50,9 @@ const FormSignup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateInputs()) return;
+
     signup(values.email, values.password, (val) => {
       dispatch(val);
       setLoading(false);
@@ -56,6 +82,11 @@ const FormSignup = () => {
   return (
     <div className="form-signup-container">
       <form className="form-signup" noValidate onSubmit={handleSubmit}>
+        {errors && errors.username ? (
+          <p className="form-error">{errors.username}</p>
+        ) : (
+          ""
+        )}
         <FormInput
           label="User Name"
           type="text"
@@ -64,7 +95,11 @@ const FormSignup = () => {
           value={values.username}
           onChange={handleChange}
         />
-        {/* {errors.email ? <p className="form-error">{errors.email}</p> : null} */}
+        {errors && errors.email ? (
+          <p className="form-error">{errors.email}</p>
+        ) : (
+          ""
+        )}
         <FormInput
           label="Email"
           type="email"
@@ -73,9 +108,11 @@ const FormSignup = () => {
           value={values.email}
           onChange={handleChange}
         />
-        {/* {errors.password ? (
+        {errors && errors.password ? (
           <p className="form-error">{errors.password}</p>
-        ) : null} */}
+        ) : (
+          ""
+        )}
         <FormInput
           label="Password"
           type="text"
@@ -84,9 +121,11 @@ const FormSignup = () => {
           value={values.password}
           onChange={handleChange}
         />
-        {/* {errors.password2 ? (
+        {errors && errors.password2 ? (
           <p className="form-error">{errors.password2}</p>
-        ) : null} */}
+        ) : (
+          ""
+        )}
         <FormInput
           label="Password2"
           type="text"

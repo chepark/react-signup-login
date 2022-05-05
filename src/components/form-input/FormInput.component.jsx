@@ -1,4 +1,3 @@
-import formValidation from "../formValidation";
 import useForm from "../useForm.hook";
 
 const FormInput = ({ label, ...otherProps }) => {
