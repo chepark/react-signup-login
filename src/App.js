@@ -10,12 +10,14 @@ import FormLogin from "./components/form-login/FormLogin.component";
 import Dashboard from "./components/dashboard/Dashboard.component";
 import Logout from "./components/logout/Logout.component";
 import PrivateRoute from "./components/PrivateRoute";
+import { getUserByEmail } from "./api";
 
 function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // add setUser
+        // getUserByEmail("parkchaeah331@gmail.com");
       } else {
         //user is signed out
       }

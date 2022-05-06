@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FormInput from "../form-input/FormInput.component";
@@ -9,6 +9,7 @@ import {
 } from "../../api/AuthApi";
 import { useAuth } from "../../contexts";
 import "./_formSignup.styles.scss";
+import { getUserByEmail } from "../../api";
 
 const FormSignup = () => {
   const [values, setValues] = useState({
@@ -19,9 +20,13 @@ const FormSignup = () => {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState();
-  const { state, dispatch } = useAuth();
 
+  const { state, dispatch } = useAuth();
   let navigate = useNavigate();
+
+  useEffect(() => {
+    getUserByEmail("parkchaeah331@gmail.com");
+  }, []);
 
   const validateInputs = () => {
     let isError = {};
@@ -62,7 +67,6 @@ const FormSignup = () => {
       setLoading(false);
       // navigate("/", { replace: true });
     });
-
     setLoading(true);
   };
 
