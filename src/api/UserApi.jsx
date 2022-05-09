@@ -3,6 +3,7 @@ import {
   doc,
   setDoc,
   getDocs,
+  getDoc,
   query,
   where,
 } from "firebase/firestore";
@@ -17,10 +18,14 @@ export const createUser = async (uid, email, username) => {
   });
 };
 
-export const getUserByEmail = async (email) => {
+export const getUserByEmail = async (email, setErrors) => {
   const q = query(usersRef, where("email", "==", email));
   const querySnapshot = await getDocs(q);
+
   querySnapshot.forEach((doc) => {
-    console.log("getUserByEmail", doc.data());
+    if (doc.data()) {
+      setErrors({ exist: "Email is already taken." });
+      return;
+    }
   });
 };

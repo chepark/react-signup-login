@@ -7,6 +7,8 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
   signOut,
+  updateProfile,
+  updateEmail,
 } from "firebase/auth";
 import {
   SIGNUP_SUCCESS,
@@ -16,21 +18,23 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
 } from "../reducers/types";
+import { createUser } from "./UserApi";
 
 const dispatchAction = (callback, type, payload) => {
   const action = { type, payload };
   callback(action);
 };
 
-export const signup = (email, password, cb) => {
+export const signup = (values, cb) => {
+  const { username, email, password } = values;
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      console.log("Signed-up successfully", user);
       dispatchAction(cb, SIGNUP_SUCCESS, user);
+      // create a user doc in firestore.
+      createUser(user.uid, email, username);
     })
     .catch((error) => {
-      console.log("Error in signup", error.message);
       dispatchAction(cb, SIGNUP_FAIL, error);
     });
 };
@@ -41,10 +45,10 @@ export const signupWithFacebook = (cb) => {
   return signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
-      const credential = FacebookAuthProvider.credentialFromResult(result);
-      const accessToken = credential.accessToken;
+      const { uid, email, displayName } = user;
+      createUser(uid, email, displayName);
+
       dispatchAction(cb, SIGNUP_SUCCESS, user);
-      console.log("facebook signup", user);
     })
     .catch((error) => {
       const credential = FacebookAuthProvider.credentialFromError(error);
@@ -58,11 +62,10 @@ export const signupWithGoogle = (cb) => {
 
   return signInWithPopup(auth, provider)
     .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
       const user = result.user;
+      const { uid, email, displayName } = user;
+      createUser(uid, email, displayName);
       dispatchAction(cb, SIGNUP_SUCCESS, user);
-      console.log("google signup", user);
     })
     .catch((error) => {
       const credential = GoogleAuthProvider.credentialFromError(error);
@@ -88,5 +91,29 @@ export const logout = (cb) => {
     })
     .catch((error) => {
       dispatchAction(cb, LOGOUT_FAIL, error);
+    });
+};
+
+export const updateUserProfile = (newUserName) => {
+  updateProfile(auth.currentUser, {
+    displayName: newUserName,
+  })
+    .then(() => {
+      // profile updated
+      console.log("username updated");
+    })
+    .catch((error) => {
+      console.log("Error in UserProfileUpdate");
+    });
+};
+
+export const updateUserEmail = (newEmail) => {
+  updateEmail(auth.currentUser, newEmail)
+    .then(() => {
+      // Email updated.
+      console.log("email updated");
+    })
+    .catch((error) => {
+      console.log("Error in EmailUpdate");
     });
 };

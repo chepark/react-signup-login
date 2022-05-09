@@ -1,8 +1,6 @@
 @import "../../styles/variables.scss";
 
-.form-signup-container {
-  // border: 1px solid black;
-  // border-radius: 15px;
+.form-login-container {
   width: 30vw;
   margin: auto;
 
@@ -48,7 +46,7 @@
   }
 }
 
-.social-signup {
+.social-login {
   display: flex;
   flex-direction: column;
 
@@ -56,7 +54,7 @@
     margin: 0px;
   }
 
-  .google-signup {
+  .google-login {
     margin-top: 10px;
   }
 }
@@ -65,9 +63,4 @@
   font-size: 0.8em;
   color: $color-alert-error;
   margin-top: 5px;
-}
-
-.form-link {
-  margin-top: 2rem;
-  text-align: center;
 }

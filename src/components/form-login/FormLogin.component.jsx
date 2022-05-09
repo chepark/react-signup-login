@@ -1,5 +1,9 @@
+import "./_formLogin.styles.scss";
+import { Backdrop } from "@mui/material";
+import { CircularProgress } from "@mui/material";
+
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import FormInput from "../form-input/FormInput.component";
 import { login, signupWithFacebook, signupWithGoogle } from "../../api/AuthApi";
@@ -52,6 +56,7 @@ const FormLogin = () => {
 
   return (
     <div className="form-login-container">
+      <h2 className="form-header">Log In</h2>
       <form className="form-login" noValidate onSubmit={handleSubmit}>
         {/* {errors.email ? <p className="form-error">{errors.email}</p> : null} */}
         <FormInput
@@ -73,23 +78,42 @@ const FormLogin = () => {
           value={values.password}
           onChange={handleChange}
         />
-        {/* {errors.password2 ? (
-          <p className="form-error">{errors.password2}</p>
-        ) : null} */}
 
-        <button type="submit" disabled={loading}>
+        <button
+          className="form-button button-submit"
+          type="submit"
+          disabled={loading}
+        >
           Log In
         </button>
       </form>
 
+      <div className="line">
+        <span>or</span>
+      </div>
+
       <div className="social-login">
-        <button className="facebook-login" onClick={handleClickFacebookSignUp}>
+        <button
+          className="form-button facebook-login"
+          onClick={handleClickFacebookSignUp}
+        >
           Login with Facebook
         </button>
-        <button className="google-login" onClick={handleClickGoogleSignup}>
+        <button
+          className="form-button google-login"
+          onClick={handleClickGoogleSignup}
+        >
           Login with Google
         </button>
       </div>
+      <p className="form-link">
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+      </p>
+      {
+        <Backdrop open={loading}>
+          <CircularProgress />
+        </Backdrop>
+      }
     </div>
   );
 };

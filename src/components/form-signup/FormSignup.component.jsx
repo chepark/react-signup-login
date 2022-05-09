@@ -1,5 +1,9 @@
+import "./_formSignup.styles.scss";
+import { Backdrop } from "@mui/material";
+import { CircularProgress } from "@mui/material";
+
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import FormInput from "../form-input/FormInput.component";
 import {
@@ -8,7 +12,6 @@ import {
   signupWithGoogle,
 } from "../../api/AuthApi";
 import { useAuth } from "../../contexts";
-import "./_formSignup.styles.scss";
 import { getUserByEmail } from "../../api";
 
 const FormSignup = () => {
@@ -25,7 +28,7 @@ const FormSignup = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    getUserByEmail("parkchaeah331@gmail.com");
+    // getUserByEmail("parkchaeah331@gmail.com");
   }, []);
 
   const validateInputs = () => {
@@ -46,6 +49,7 @@ const FormSignup = () => {
     if (values.password2 !== values.password)
       isError.password2 = "Passwords do not match.";
 
+    // Check if any errors are in isError.
     if (Object.keys(isError).length > 0) {
       setErrors(isError);
       return false;
@@ -57,15 +61,20 @@ const FormSignup = () => {
     setValues({ ...values, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors();
 
+    // Check if the email is already taken.
+    await getUserByEmail(values.email, setErrors);
+
+    // Validate user inputs are correct
     if (!validateInputs()) return;
 
-    signup(values.email, values.password, (val) => {
+    signup(values, (val) => {
       dispatch(val);
       setLoading(false);
-      // navigate("/", { replace: true });
+      navigate("/", { replace: true });
     });
     setLoading(true);
   };
@@ -118,7 +127,11 @@ const FormSignup = () => {
         ) : (
           ""
         )}
-
+        {errors && errors.exist ? (
+          <p className="form-error">*{errors.exist}</p>
+        ) : (
+          ""
+        )}
         <FormInput
           label="Password"
           type="text"
@@ -145,6 +158,7 @@ const FormSignup = () => {
         ) : (
           ""
         )}
+
         <button
           className="form-button button-submit"
           type="submit"
@@ -170,6 +184,14 @@ const FormSignup = () => {
           Sign Up with Google
         </button>
       </div>
+      <p className="form-link">
+        Already have an account? <Link to="/login">Log in</Link>
+      </p>
+      {
+        <Backdrop open={loading}>
+          <CircularProgress />
+        </Backdrop>
+      }
     </div>
   );
 };
