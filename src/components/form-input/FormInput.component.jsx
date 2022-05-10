@@ -1,4 +1,3 @@
-import useForm from "../useForm.hook";
 import "./_formInput.styles.scss";
 
 const FormInput = ({ label, ...otherProps }) => {

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "React Sign Up and Log In",
+  "name": "Create React Signup and Login sample.",
   "icons": [
     {
       "src": "favicon.ico",

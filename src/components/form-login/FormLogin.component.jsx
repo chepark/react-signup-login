@@ -107,7 +107,10 @@ const FormLogin = () => {
         </button>
       </div>
       <p className="form-link">
-        Don't have an account? <Link to="/signup">Sign Up</Link>
+        Don't have an account?{" "}
+        <Link to="/signup" className="text-link">
+          Sign Up
+        </Link>
       </p>
       {
         <Backdrop open={loading}>
