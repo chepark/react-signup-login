@@ -18,7 +18,11 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
 } from "../reducers/types";
-import { createUser } from "./UserApi";
+import {
+  createUser,
+  updateFirestoreEmail,
+  updateFirestoreUserName,
+} from "./UserApi";
 
 const dispatchAction = (callback, type, payload) => {
   const action = { type, payload };
@@ -27,12 +31,24 @@ const dispatchAction = (callback, type, payload) => {
 
 export const signup = (values, cb) => {
   const { username, email, password } = values;
+
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      dispatchAction(cb, SIGNUP_SUCCESS, user);
+
+      // after create account
+      // update displayName(username)
+      updateProfile(auth.currentUser, {
+        displayName: username,
+      }).then(() => {
+        // create user doc in firestore.
+        createUser(user.uid, email, username);
+        // dispatch the data to context.
+        dispatchAction(cb, SIGNUP_SUCCESS, user);
+        console.log("username updated");
+      });
+
       // create a user doc in firestore.
-      createUser(user.uid, email, username);
     })
     .catch((error) => {
       dispatchAction(cb, SIGNUP_FAIL, error);
@@ -101,6 +117,7 @@ export const updateUserProfile = (newUserName) => {
     .then(() => {
       // profile updated
       console.log("username updated");
+      updateFirestoreUserName(auth.currentUser.uid, newUserName);
     })
     .catch((error) => {
       console.log("Error in UserProfileUpdate");
@@ -112,6 +129,7 @@ export const updateUserEmail = (newEmail) => {
     .then(() => {
       // Email updated.
       console.log("email updated");
+      updateFirestoreEmail(auth.currentUser.uid, newEmail);
     })
     .catch((error) => {
       console.log("Error in EmailUpdate");

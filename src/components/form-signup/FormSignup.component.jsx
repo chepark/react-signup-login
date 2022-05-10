@@ -76,6 +76,7 @@ const FormSignup = () => {
       setLoading(false);
       navigate("/", { replace: true });
     });
+
     setLoading(true);
   };
 

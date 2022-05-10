@@ -6,16 +6,16 @@ import { useAuth } from "../../contexts";
 import FormInput from "../form-input/FormInput.component";
 
 const Dashboard = () => {
-  const [edit, setEdit] = useState(true);
+  const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState();
 
   const { state, dispatch } = useAuth();
-  const { email, displayName } = state.user;
+  const { user } = state;
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValues({ username: displayName, email: email });
+    setValues({ username: user.displayName, email: user.email });
   }, []);
 
   const handleLogout = () => {
@@ -34,11 +34,11 @@ const Dashboard = () => {
   };
 
   const handleSave = () => {
-    if (email !== values.email) {
+    if (user.email !== values.email) {
       updateUserEmail(values.email);
     }
 
-    if (displayName !== values.username) {
+    if (user.displayName !== values.username) {
       updateUserProfile(values.username);
     }
 
@@ -48,10 +48,12 @@ const Dashboard = () => {
   };
 
   const handleUserNameChange = (e) => {
+    e.preventDefault();
     setValues({ ...values, username: e.target.value });
   };
 
   const handleEmailChange = (e) => {
+    e.preventDefault();
     setValues({ ...values, email: e.target.value });
     console.log(values);
   };
@@ -61,11 +63,11 @@ const Dashboard = () => {
       <>
         <div className="dashboard-profile">
           <p>User Name:</p>
-          <p>{displayName}</p>
+          <p>{values.username}</p>
         </div>
         <div className="dashboard-profile">
           <p>Email:</p>
-          <p>{email}</p>
+          <p>{values.email}</p>
         </div>
         <button onClick={handleEdit}>Edit</button>
       </>
@@ -75,7 +77,7 @@ const Dashboard = () => {
   const renderEditMode = () => {
     return (
       <>
-        {values && values.username && (
+        {values && (
           <FormInput
             label="User Name"
             type="text"
@@ -85,7 +87,7 @@ const Dashboard = () => {
             onChange={handleUserNameChange}
           />
         )}
-        {values && values.email && (
+        {values && (
           <FormInput
             label="Email"
             type="text"
@@ -104,7 +106,9 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <h2>Dashboard</h2>
-      {!edit ? renderDefaultMode() : renderEditMode()}
+      {console.log(values)}
+      {!edit && values && values.username && renderDefaultMode()}
+      {edit && renderEditMode()}
       <button onClick={handleLogout}>Log Out</button>
     </div>
   );

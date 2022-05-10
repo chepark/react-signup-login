@@ -4,6 +4,7 @@ import {
   setDoc,
   getDocs,
   getDoc,
+  updateDoc,
   query,
   where,
 } from "firebase/firestore";
@@ -27,5 +28,21 @@ export const getUserByEmail = async (email, setErrors) => {
       setErrors({ exist: "Email is already taken." });
       return;
     }
+  });
+};
+
+export const updateFirestoreUserName = async (uid, newUserName) => {
+  const docRef = doc(db, "users", uid);
+
+  await updateDoc(docRef, {
+    username: newUserName,
+  });
+};
+
+export const updateFirestoreEmail = async (uid, newEmail) => {
+  const docRef = doc(db, "users", uid);
+
+  await updateDoc(docRef, {
+    email: newEmail,
   });
 };
