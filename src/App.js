@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { auth } from "./firebase/firebase";
+import { auth } from "./firebase/firebase.config";
 import { onAuthStateChanged } from "firebase/auth";
 
 import "./App.scss";

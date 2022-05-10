@@ -1,3 +1,4 @@
+import "./_dashboard.styles.scss";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -105,11 +106,13 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <h2>Dashboard</h2>
-      {console.log(values)}
+      <h2 className="dashboard-header">Dashboard</h2>
+
       {!edit && values && values.username && renderDefaultMode()}
       {edit && renderEditMode()}
-      <button onClick={handleLogout}>Log Out</button>
+      <button className="dashboard-logout" onClick={handleLogout}>
+        Log Out
+      </button>
     </div>
   );
 };

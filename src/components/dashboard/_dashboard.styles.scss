@@ -1,0 +1,44 @@
+@import "../../styles/variables.scss";
+
+.dashboard-container {
+  // border: 1px solid black;
+  // border-radius: 15px;
+  border: 1px solid green;
+  width: 30vw;
+  margin: auto;
+
+  padding-top: 4rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+
+  button {
+    width: 100%;
+    margin: 10px 0;
+    border-style: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    background-color: $color-primary;
+    color: $font-color-white;
+  }
+}
+
+.dashboard-header {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.dashboard-profile {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 0.5em;
+}
