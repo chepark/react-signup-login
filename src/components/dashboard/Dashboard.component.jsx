@@ -27,6 +27,7 @@ const Dashboard = () => {
   };
 
   const handleCancel = () => {
+    setValues({ username: user.displayName, email: user.email });
     setEdit(false);
   };
 

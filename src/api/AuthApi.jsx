@@ -95,7 +95,15 @@ export const login = (email, password, cb) => {
       dispatchAction(cb, LOGIN_SUCCESS, user);
     })
     .catch((error) => {
-      dispatchAction(cb, LOGIN_FAIL, error);
+      console.log("error code in login", error.code);
+      switch (error.code) {
+        case "auth/user-not-found":
+          return dispatchAction(cb, LOGIN_FAIL, "Email does not exist.");
+        case "auth/wrong-password":
+          return dispatchAction(cb, LOGIN_FAIL, "Password is wrong.");
+        default:
+          dispatchAction(cb, LOGIN_FAIL, error.code);
+      }
     });
 };
 
@@ -124,6 +132,9 @@ export const updateUserProfile = (newUserName) => {
 };
 
 export const updateUserEmail = (newEmail) => {
+  // reauthenticate first.
+
+  // update email.
   updateEmail(auth.currentUser, newEmail)
     .then(() => {
       // Email updated.

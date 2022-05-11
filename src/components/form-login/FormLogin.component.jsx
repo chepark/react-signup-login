@@ -8,6 +8,7 @@ import { useNavigate, Link } from "react-router-dom";
 import FormInput from "../form-input/FormInput.component";
 import { login, signupWithFacebook, signupWithGoogle } from "../../api/AuthApi";
 import { useAuth } from "../../contexts";
+import AlertMessage from "../alertMessage/AlertMessage.component";
 
 const FormLogin = () => {
   const [values, setValues] = useState({
@@ -57,6 +58,7 @@ const FormLogin = () => {
   return (
     <div className="form-login-container">
       <h2 className="form-header">Log In</h2>
+      {state.loginError ? <AlertMessage message={state.loginError} /> : null}
       <form className="form-login" noValidate onSubmit={handleSubmit}>
         {/* {errors.email ? <p className="form-error">{errors.email}</p> : null} */}
         <FormInput
