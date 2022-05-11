@@ -8,6 +8,8 @@ import {
   signOut,
   updateProfile,
   updateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import {
   SIGNUP_SUCCESS,
@@ -16,6 +18,8 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   LOGOUT_FAIL,
+  UPDATE_SUCCESS,
+  UPDATE_FAIL,
 } from "../reducers/types";
 import {
   createUser,
@@ -95,7 +99,6 @@ export const login = (email, password, cb) => {
       dispatchAction(cb, LOGIN_SUCCESS, user);
     })
     .catch((error) => {
-      console.log("error code in login", error.code);
       switch (error.code) {
         case "auth/user-not-found":
           return dispatchAction(cb, LOGIN_FAIL, "Email does not exist.");
@@ -131,17 +134,44 @@ export const updateUserProfile = (newUserName) => {
     });
 };
 
-export const updateUserEmail = (newEmail) => {
+export const updateUserEmail = async (newEmail, cb) => {
   // reauthenticate first.
+  const user = auth.currentUser;
+  const password = prompt("Password please.");
+  const credential = EmailAuthProvider.credential(user.email, password);
 
-  // update email.
-  updateEmail(auth.currentUser, newEmail)
-    .then(() => {
-      // Email updated.
-      console.log("email updated");
-      updateFirestoreEmail(auth.currentUser.uid, newEmail);
-    })
-    .catch((error) => {
-      console.log("Error in EmailUpdate");
-    });
+  try {
+    // reauthenticate is needed to change email address.
+    await reauthenticateWithCredential(user, credential);
+    await updateEmail(auth.currentUser, newEmail);
+    await updateFirestoreEmail(auth.currentUser.uid, newEmail);
+    dispatchAction(cb, UPDATE_SUCCESS, user);
+    console.log("wow");
+  } catch (error) {
+    switch (error.code) {
+      case "auth/wrong-password":
+        return dispatchAction(cb, UPDATE_FAIL, "Wrong password.");
+      default:
+        console.log(Error.code);
+    }
+  }
+
+  // reauthenticateWithCredential(user, credential)
+  //   .then(() => {
+  //     console.log("it works");
+  //   })
+  //   .catch((error) => {
+  //     console.log("not works", error);
+  //   });
+
+  // // update email.
+  // updateEmail(auth.currentUser, newEmail)
+  //   .then(() => {
+  //     // Email updated.
+  //     console.log("email updated");
+  //     updateFirestoreEmail(auth.currentUser.uid, newEmail);
+  //   })
+  //   .catch((error) => {
+  //     console.log("Error in EmailUpdate");
+  //   });
 };

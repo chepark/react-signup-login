@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { logout, updateUserEmail, updateUserProfile } from "../../api";
 import { useAuth } from "../../contexts";
 import FormInput from "../form-input/FormInput.component";
+import AlertMessage from "../alertMessage/AlertMessage.component";
 
 const Dashboard = () => {
   const [edit, setEdit] = useState(false);
@@ -37,7 +38,9 @@ const Dashboard = () => {
 
   const handleSave = () => {
     if (user.email !== values.email) {
-      updateUserEmail(values.email);
+      updateUserEmail(values.email, (val) => {
+        dispatch(val);
+      });
     }
 
     if (user.displayName !== values.username) {
@@ -65,11 +68,11 @@ const Dashboard = () => {
       <>
         <div className="dashboard-profile">
           <p>User Name:</p>
-          <p>{values.username}</p>
+          <p>{user.displayName}</p>
         </div>
         <div className="dashboard-profile">
           <p>Email:</p>
-          <p>{values.email}</p>
+          <p>{user.email}</p>
         </div>
         <button onClick={handleEdit}>Edit</button>
       </>
@@ -108,8 +111,11 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       <h2 className="dashboard-header">Dashboard</h2>
-
-      {!edit && values && values.username && renderDefaultMode()}
+      {!edit && state.updateError && (
+        <AlertMessage message={state.updateError} />
+      )}
+      {!edit && user && user.displayName && renderDefaultMode()}
+      {/* {!edit && values && values.username && renderDefaultMode()} */}
       {edit && renderEditMode()}
       <button className="dashboard-logout" onClick={handleLogout}>
         Log Out
