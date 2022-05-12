@@ -41,3 +41,57 @@
   gap: 10px;
   margin-bottom: 0.5em;
 }
+
+#avatar-container {
+  max-width: 120px;
+  height: auto;
+  border: 1px solid $color-inactive;
+  margin: auto;
+  border-radius: 50%;
+  margin-bottom: 30px;
+  margin-top: 20px;
+
+  position: relative;
+
+  .avatar {
+    display: block;
+    width: 100%;
+  }
+
+  .avatar-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+
+    width: 30px;
+    height: 30px;
+    background-color: $color-inactive;
+    padding: 5px;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: darkgray;
+      cursor: pointer;
+    }
+
+    image {
+      display: block;
+      max-width: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+}

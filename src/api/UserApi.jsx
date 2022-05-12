@@ -1,3 +1,4 @@
+import { FirebaseError } from "firebase/app";
 import {
   collection,
   doc,
@@ -7,7 +8,8 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../firebase/firebase.config";
+import { db, storage } from "../firebase/firebase.config";
+import { ref, uploadBytes } from "firebase/storage";
 
 const usersRef = collection(db, "users");
 
@@ -44,4 +46,11 @@ export const updateFirestoreEmail = async (uid, newEmail) => {
   await updateDoc(docRef, {
     email: newEmail,
   });
+};
+
+export const uploadProfileImageToStorage = async (uid, newImage) => {
+  const fileRef = ref(storage, uid + ".png");
+
+  const snapshot = await uploadBytes(fileRef, newImage);
+  console.log("image snapshot", snapshot);
 };

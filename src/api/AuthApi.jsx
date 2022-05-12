@@ -25,6 +25,7 @@ import {
   createUser,
   updateFirestoreEmail,
   updateFirestoreUserName,
+  uploadProfileImageToStorage,
 } from "./UserApi";
 
 const dispatchAction = (callback, type, payload) => {
@@ -120,22 +121,16 @@ export const logout = (cb) => {
     });
 };
 
-export const updateUserProfile = (newUserName, cb) => {
+export const updateUserProfile = async (newUserName, cb) => {
   const user = auth.currentUser;
-  updateProfile(user, {
-    displayName: newUserName,
-  })
-    .then(() => {
-      // profile updated
-      console.log("username updated");
-      updateFirestoreUserName(user.uid, newUserName);
-      // add dispatchAction, update success
-      // receive callback as arguments.
-      dispatchAction(cb, UPDATE_SUCCESS, user);
-    })
-    .catch((error) => {
-      console.log("Error in UserProfileUpdate");
-    });
+
+  try {
+    await updateProfile(user, { displayName: newUserName });
+    await updateFirestoreUserName(user.uid, newUserName);
+    dispatchAction(cb, UPDATE_SUCCESS, user);
+  } catch (error) {
+    console.log("Errors in UserProfileUpdate.");
+  }
 };
 
 export const updateUserEmail = async (newEmail, cb, setValues) => {
@@ -147,8 +142,8 @@ export const updateUserEmail = async (newEmail, cb, setValues) => {
   try {
     // reauthenticate is needed to change email address.
     await reauthenticateWithCredential(user, credential);
-    await updateEmail(auth.currentUser, newEmail);
-    await updateFirestoreEmail(auth.currentUser.uid, newEmail);
+    await updateEmail(user, newEmail);
+    await updateFirestoreEmail(user.uid, newEmail);
     dispatchAction(cb, UPDATE_SUCCESS, user);
     console.log("wow");
   } catch (error) {
@@ -159,5 +154,15 @@ export const updateUserEmail = async (newEmail, cb, setValues) => {
       default:
         console.log(error.code);
     }
+  }
+};
+
+export const updateProfileImage = async (newImage) => {
+  const user = auth.currentUser;
+
+  try {
+    await uploadProfileImageToStorage(user.uid, newImage);
+  } catch (error) {
+    console.log("Error in profile image update:", error);
   }
 };

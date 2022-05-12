@@ -8,10 +8,17 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts";
 import { UPDATE_RESET } from "../../reducers/types";
 
-import { logout, updateUserEmail, updateUserProfile } from "../../api";
+import {
+  logout,
+  updateProfileImage,
+  updateUserEmail,
+  updateUserProfile,
+  uploadProfileImageToStorage,
+} from "../../api";
 
 import FormInput from "../form-input/FormInput.component";
 import AlertMessage from "../alertMessage/AlertMessage.component";
+import { SliderValueLabelUnstyled } from "@mui/base";
 
 const Dashboard = () => {
   const [edit, setEdit] = useState(false);
@@ -23,7 +30,16 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValues({ username: user.displayName, email: user.email });
+    const imageFile =
+      user.photoUrl !== ""
+        ? user.photoUrl
+        : "../../assets/images/profileIcon.png";
+
+    setValues({
+      username: user.displayName,
+      email: user.email,
+      photoURL: imageFile,
+    });
   }, []);
 
   const handleLogout = () => {
@@ -66,6 +82,13 @@ const Dashboard = () => {
     setEdit(false);
   };
 
+  const handleImageChange = (e) => {
+    e.preventDefault();
+
+    setValues({ ...values, photoURL: e.target.files[0] });
+    uploadProfileImageToStorage(user.uid, e.target.files[0]);
+  };
+
   const handleUserNameChange = (e) => {
     e.preventDefault();
     setValues({ ...values, username: e.target.value });
@@ -80,6 +103,13 @@ const Dashboard = () => {
   const renderDefaultMode = () => {
     return (
       <>
+        <div className="dashboard-profile" id="avatar-container">
+          <img
+            className="avatar"
+            src={require("../../assets/images/profileIcon.png")}
+            alt="avatar"
+          />
+        </div>
         <div className="dashboard-profile">
           <p>User Name:</p>
           <p>{user.displayName}</p>
@@ -96,6 +126,24 @@ const Dashboard = () => {
   const renderEditMode = () => {
     return (
       <>
+        <div className="dashboard-profile" id="avatar-container">
+          <img
+            className="avatar"
+            src={require("../../assets/images/profileIcon.png")}
+            alt="avatar"
+          />
+          <div className="avatar-btn">
+            <img
+              src={require("../../assets/images/camera.png")}
+              alt="change avatar"
+            />
+            <input
+              type="file"
+              className="avatar-input"
+              onChange={handleImageChange}
+            />
+          </div>
+        </div>
         {values && (
           <FormInput
             label="User Name"
