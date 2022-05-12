@@ -5,11 +5,13 @@ import { CircularProgress } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { logout, updateUserEmail, updateUserProfile } from "../../api";
 import { useAuth } from "../../contexts";
+import { UPDATE_RESET } from "../../reducers/types";
+
+import { logout, updateUserEmail, updateUserProfile } from "../../api";
+
 import FormInput from "../form-input/FormInput.component";
 import AlertMessage from "../alertMessage/AlertMessage.component";
-import { UPDATE_RESET } from "../../reducers/types";
 
 const Dashboard = () => {
   const [edit, setEdit] = useState(false);
@@ -53,7 +55,10 @@ const Dashboard = () => {
     }
 
     if (user.displayName !== values.username) {
-      updateUserProfile(values.username);
+      updateUserProfile(values.username, (val) => {
+        dispatch(val);
+        setLoading(false);
+      });
     }
 
     dispatch({ type: UPDATE_RESET }); //Set updateError to ""(Empty string.)

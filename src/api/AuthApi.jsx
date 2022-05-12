@@ -120,14 +120,18 @@ export const logout = (cb) => {
     });
 };
 
-export const updateUserProfile = (newUserName) => {
-  updateProfile(auth.currentUser, {
+export const updateUserProfile = (newUserName, cb) => {
+  const user = auth.currentUser;
+  updateProfile(user, {
     displayName: newUserName,
   })
     .then(() => {
       // profile updated
       console.log("username updated");
-      updateFirestoreUserName(auth.currentUser.uid, newUserName);
+      updateFirestoreUserName(user.uid, newUserName);
+      // add dispatchAction, update success
+      // receive callback as arguments.
+      dispatchAction(cb, UPDATE_SUCCESS, user);
     })
     .catch((error) => {
       console.log("Error in UserProfileUpdate");
