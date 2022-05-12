@@ -1,4 +1,7 @@
 import "./_dashboard.styles.scss";
+import { Backdrop } from "@mui/material";
+import { CircularProgress } from "@mui/material";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +9,7 @@ import { logout, updateUserEmail, updateUserProfile } from "../../api";
 import { useAuth } from "../../contexts";
 import FormInput from "../form-input/FormInput.component";
 import AlertMessage from "../alertMessage/AlertMessage.component";
+import { UPDATE_RESET } from "../../reducers/types";
 
 const Dashboard = () => {
   const [edit, setEdit] = useState(false);
@@ -38,17 +42,22 @@ const Dashboard = () => {
 
   const handleSave = () => {
     if (user.email !== values.email) {
-      updateUserEmail(values.email, (val) => {
-        dispatch(val);
-      });
+      updateUserEmail(
+        values.email,
+        (val) => {
+          dispatch(val);
+          setLoading(false);
+        },
+        setValues
+      );
     }
 
     if (user.displayName !== values.username) {
       updateUserProfile(values.username);
     }
 
-    // change auth context.
-    // dispatch UPDATE_PROFILE
+    dispatch({ type: UPDATE_RESET }); //Set updateError to ""(Empty string.)
+    setLoading(true);
     setEdit(false);
   };
 
@@ -92,7 +101,7 @@ const Dashboard = () => {
             onChange={handleUserNameChange}
           />
         )}
-        {values && (
+        {values && values.email && (
           <FormInput
             label="Email"
             type="text"
@@ -114,12 +123,15 @@ const Dashboard = () => {
       {!edit && state.updateError && (
         <AlertMessage message={state.updateError} />
       )}
-      {!edit && user && user.displayName && renderDefaultMode()}
+      {!edit && user && renderDefaultMode()}
       {/* {!edit && values && values.username && renderDefaultMode()} */}
       {edit && renderEditMode()}
       <button className="dashboard-logout" onClick={handleLogout}>
         Log Out
       </button>
+      <Backdrop open={loading}>
+        <CircularProgress />
+      </Backdrop>
     </div>
   );
 };

@@ -134,7 +134,7 @@ export const updateUserProfile = (newUserName) => {
     });
 };
 
-export const updateUserEmail = async (newEmail, cb) => {
+export const updateUserEmail = async (newEmail, cb, setValues) => {
   // reauthenticate first.
   const user = auth.currentUser;
   const password = prompt("Password please.");
@@ -150,28 +150,10 @@ export const updateUserEmail = async (newEmail, cb) => {
   } catch (error) {
     switch (error.code) {
       case "auth/wrong-password":
+        setValues({ username: user.displayName, email: user.email });
         return dispatchAction(cb, UPDATE_FAIL, "Wrong password.");
       default:
-        console.log(Error.code);
+        console.log(error.code);
     }
   }
-
-  // reauthenticateWithCredential(user, credential)
-  //   .then(() => {
-  //     console.log("it works");
-  //   })
-  //   .catch((error) => {
-  //     console.log("not works", error);
-  //   });
-
-  // // update email.
-  // updateEmail(auth.currentUser, newEmail)
-  //   .then(() => {
-  //     // Email updated.
-  //     console.log("email updated");
-  //     updateFirestoreEmail(auth.currentUser.uid, newEmail);
-  //   })
-  //   .catch((error) => {
-  //     console.log("Error in EmailUpdate");
-  //   });
 };
