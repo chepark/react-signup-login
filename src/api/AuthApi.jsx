@@ -23,7 +23,11 @@ import {
 } from "../reducers/types";
 import {
   createUser,
+  deleteProfilePhoto,
+  getProfilePhotoURL,
+  imageDirectory,
   updateFirestoreEmail,
+  updateFirestorePhotoURL,
   updateFirestoreUserName,
   uploadProfileImageToStorage,
 } from "./UserApi";
@@ -121,7 +125,7 @@ export const logout = (cb) => {
     });
 };
 
-export const updateUserProfile = async (newUserName, cb) => {
+export const updateUserDisplayName = async (newUserName, cb) => {
   const user = auth.currentUser;
 
   try {
@@ -157,12 +161,29 @@ export const updateUserEmail = async (newEmail, cb, setValues) => {
   }
 };
 
-export const updateProfileImage = async (newImage) => {
-  const user = auth.currentUser;
-
+export const updateUserPhotoURL = async (newImage, cb) => {
   try {
-    await uploadProfileImageToStorage(user.uid, newImage);
+    const user = auth.currentUser;
+    const newPhotoURL = await getProfilePhotoURL(
+      user.uid,
+      imageDirectory.profile,
+      newImage
+    );
+
+    await updateProfile(user, { photoURL: newPhotoURL });
+    await updateFirestorePhotoURL(user.uid, newPhotoURL);
+    dispatchAction(cb, UPDATE_SUCCESS, user);
+    await deleteProfilePhoto(imageDirectory.temporary, user.uid);
   } catch (error) {
-    console.log("Error in profile image update:", error);
+    console.log("Error in update photoURL in auth: ", error.code);
   }
+
+  // try {
+  //   const photoURL = await uploadProfileImageToStorage(user.uid, newImage);
+  //   await updateProfile(user, { photoURL });
+  //   dispatchAction(cb, UPDATE_SUCCESS, user);
+  //   console.log("Image updated successfullly in firebase");
+  // } catch (error) {
+  //   console.log("Error in profile image update:", error);
+  // }
 };

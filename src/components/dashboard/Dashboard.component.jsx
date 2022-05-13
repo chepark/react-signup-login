@@ -9,11 +9,14 @@ import { useAuth } from "../../contexts";
 import { UPDATE_RESET } from "../../reducers/types";
 
 import {
+  deleteProfilePhoto,
+  getProfilePhotoURL,
+  imageDirectory,
   logout,
   updateProfileImage,
   updateUserEmail,
-  updateUserProfile,
-  uploadProfileImageToStorage,
+  updateUserDisplayName,
+  updateUserPhotoURL,
 } from "../../api";
 
 import FormInput from "../form-input/FormInput.component";
@@ -30,15 +33,10 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const imageFile =
-      user.photoUrl !== ""
-        ? user.photoUrl
-        : "../../assets/images/profileIcon.png";
-
     setValues({
       username: user.displayName,
       email: user.email,
-      photoURL: imageFile,
+      photoURL: user.photoURL || "../../assets/images/profileIcon.png",
     });
   }, []);
 
@@ -50,7 +48,13 @@ const Dashboard = () => {
   };
 
   const handleCancel = () => {
-    setValues({ username: user.displayName, email: user.email });
+    setValues({
+      username: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+    });
+
+    deleteProfilePhoto(imageDirectory.temporary, user.uid);
     setEdit(false);
   };
 
@@ -71,7 +75,14 @@ const Dashboard = () => {
     }
 
     if (user.displayName !== values.username) {
-      updateUserProfile(values.username, (val) => {
+      updateUserDisplayName(values.username, (val) => {
+        dispatch(val);
+        setLoading(false);
+      });
+    }
+
+    if (user.photoURL !== values.photoURL) {
+      updateUserPhotoURL(values.photoURL, (val) => {
         dispatch(val);
         setLoading(false);
       });
@@ -82,11 +93,17 @@ const Dashboard = () => {
     setEdit(false);
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     e.preventDefault();
 
-    setValues({ ...values, photoURL: e.target.files[0] });
-    uploadProfileImageToStorage(user.uid, e.target.files[0]);
+    const newPhotoURL = await getProfilePhotoURL(
+      user.uid,
+      imageDirectory.temporary,
+      e.target.files[0]
+    );
+
+    setValues({ ...values, photoURL: newPhotoURL });
+    // console.log(values.photoURL);
   };
 
   const handleUserNameChange = (e) => {
@@ -104,11 +121,7 @@ const Dashboard = () => {
     return (
       <>
         <div className="dashboard-profile" id="avatar-container">
-          <img
-            className="avatar"
-            src={require("../../assets/images/profileIcon.png")}
-            alt="avatar"
-          />
+          <img className="avatar" src={user.photoURL} alt="avatar" />
         </div>
         <div className="dashboard-profile">
           <p>User Name:</p>
@@ -126,24 +139,22 @@ const Dashboard = () => {
   const renderEditMode = () => {
     return (
       <>
-        <div className="dashboard-profile" id="avatar-container">
-          <img
-            className="avatar"
-            src={require("../../assets/images/profileIcon.png")}
-            alt="avatar"
-          />
-          <div className="avatar-btn">
-            <img
-              src={require("../../assets/images/camera.png")}
-              alt="change avatar"
-            />
-            <input
-              type="file"
-              className="avatar-input"
-              onChange={handleImageChange}
-            />
+        {values && (
+          <div className="dashboard-profile" id="avatar-container">
+            <img className="avatar" src={values.photoURL} alt="avatar" />
+            <div className="avatar-btn">
+              <img
+                src={require("../../assets/images/camera.png")}
+                alt="change avatar"
+              />
+              <input
+                type="file"
+                className="avatar-input"
+                onChange={handleImageChange}
+              />
+            </div>
           </div>
-        </div>
+        )}
         {values && (
           <FormInput
             label="User Name"

@@ -9,7 +9,12 @@ import {
   where,
 } from "firebase/firestore";
 import { db, storage } from "../firebase/firebase.config";
-import { ref, uploadBytes } from "firebase/storage";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 const usersRef = collection(db, "users");
 
@@ -48,9 +53,37 @@ export const updateFirestoreEmail = async (uid, newEmail) => {
   });
 };
 
-export const uploadProfileImageToStorage = async (uid, newImage) => {
-  const fileRef = ref(storage, uid + ".png");
+export const imageDirectory = {
+  temporary: "tempImage",
+  profile: "profileImage",
+};
 
-  const snapshot = await uploadBytes(fileRef, newImage);
-  console.log("image snapshot", snapshot);
+export const getProfilePhotoURL = async (uid, directory, newImage) => {
+  try {
+    const fileRef = ref(storage, directory + "/" + uid + ".png");
+    await uploadBytes(fileRef, newImage);
+    const newPhotoURL = await getDownloadURL(fileRef);
+    return newPhotoURL;
+  } catch (error) {
+    console.log("Error with photoURL in storage: ", error.message);
+  }
+};
+
+export const deleteProfilePhoto = async (directory, uid) => {
+  const photoRef = ref(storage, directory + "/" + uid + ".png");
+
+  try {
+    await deleteObject(photoRef);
+    console.log("Deleted photo");
+  } catch (error) {
+    console.log("Error in deleting photoURL: ", error.code);
+  }
+};
+
+export const updateFirestorePhotoURL = async (uid, newPhotoURL) => {
+  const docRef = doc(db, "users", uid);
+
+  await updateDoc(docRef, {
+    photoURL: newPhotoURL,
+  });
 };
