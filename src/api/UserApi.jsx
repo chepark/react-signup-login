@@ -63,6 +63,7 @@ export const getProfilePhotoURL = async (uid, directory, newImage) => {
     const fileRef = ref(storage, directory + "/" + uid + ".png");
     await uploadBytes(fileRef, newImage);
     const newPhotoURL = await getDownloadURL(fileRef);
+
     return newPhotoURL;
   } catch (error) {
     console.log("Error with photoURL in storage: ", error.message);

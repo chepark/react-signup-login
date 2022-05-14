@@ -1,4 +1,4 @@
-import { auth } from "../firebase/firebase.config";
+import { auth, storage } from "../firebase/firebase.config";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -29,8 +29,9 @@ import {
   updateFirestoreEmail,
   updateFirestorePhotoURL,
   updateFirestoreUserName,
-  uploadProfileImageToStorage,
 } from "./UserApi";
+
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const dispatchAction = (callback, type, payload) => {
   const action = { type, payload };
@@ -161,29 +162,21 @@ export const updateUserEmail = async (newEmail, cb, setValues) => {
   }
 };
 
-export const updateUserPhotoURL = async (newImage, cb) => {
+export const updateUserPhotoURL = async (newPhotoURL, newPhotoFile, cb) => {
   try {
     const user = auth.currentUser;
+
+    await deleteProfilePhoto(imageDirectory.temporary, user.uid);
     const newPhotoURL = await getProfilePhotoURL(
       user.uid,
       imageDirectory.profile,
-      newImage
+      newPhotoFile
     );
 
     await updateProfile(user, { photoURL: newPhotoURL });
-    await updateFirestorePhotoURL(user.uid, newPhotoURL);
+    // await updateFirestorePhotoURL(user.uid, newPhotoURL);
     dispatchAction(cb, UPDATE_SUCCESS, user);
-    await deleteProfilePhoto(imageDirectory.temporary, user.uid);
   } catch (error) {
     console.log("Error in update photoURL in auth: ", error.code);
   }
-
-  // try {
-  //   const photoURL = await uploadProfileImageToStorage(user.uid, newImage);
-  //   await updateProfile(user, { photoURL });
-  //   dispatchAction(cb, UPDATE_SUCCESS, user);
-  //   console.log("Image updated successfullly in firebase");
-  // } catch (error) {
-  //   console.log("Error in profile image update:", error);
-  // }
 };

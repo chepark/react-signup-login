@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState();
+  const [photoFile, setPhotoFile] = useState();
 
   const { state, dispatch } = useAuth();
   const { user } = state;
@@ -82,7 +83,7 @@ const Dashboard = () => {
     }
 
     if (user.photoURL !== values.photoURL) {
-      updateUserPhotoURL(values.photoURL, (val) => {
+      updateUserPhotoURL(values.photoURL, photoFile, (val) => {
         dispatch(val);
         setLoading(false);
       });
@@ -101,8 +102,9 @@ const Dashboard = () => {
       imageDirectory.temporary,
       e.target.files[0]
     );
-
+    setPhotoFile(e.target.files[0]);
     setValues({ ...values, photoURL: newPhotoURL });
+
     // console.log(values.photoURL);
   };
 
