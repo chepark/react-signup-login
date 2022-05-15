@@ -1,7 +1,7 @@
 # React Sign Up and Log In
 
 <p align="center">
-  <img width="460" height="300" src="./assets/demo.gif">
+  <img width="530" height="350" src="./demo.gif">
 </p>
 
 ## ⚙️ Features

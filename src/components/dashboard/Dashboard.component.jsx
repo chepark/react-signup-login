@@ -76,6 +76,8 @@ const Dashboard = () => {
     }
 
     if (user.displayName !== values.username) {
+      console.log("username different");
+
       updateUserDisplayName(values.username, (val) => {
         dispatch(val);
         setLoading(false);
@@ -83,6 +85,8 @@ const Dashboard = () => {
     }
 
     if (user.photoURL !== values.photoURL) {
+      console.log("photo different");
+
       updateUserPhotoURL(values.photoURL, photoFile, (val) => {
         dispatch(val);
         setLoading(false);
