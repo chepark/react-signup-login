@@ -27,11 +27,8 @@ import {
   getProfilePhotoURL,
   imageDirectory,
   updateFirestoreEmail,
-  updateFirestorePhotoURL,
   updateFirestoreUserName,
 } from "./UserApi";
-
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const dispatchAction = (callback, type, payload) => {
   const action = { type, payload };
@@ -76,7 +73,6 @@ export const signupWithFacebook = (cb) => {
       dispatchAction(cb, SIGNUP_SUCCESS, user);
     })
     .catch((error) => {
-      const credential = FacebookAuthProvider.credentialFromError(error);
       dispatchAction(cb, SIGNUP_FAIL, error);
       console.log("facebook error", error);
     });
@@ -93,7 +89,6 @@ export const signupWithGoogle = (cb) => {
       dispatchAction(cb, SIGNUP_SUCCESS, user);
     })
     .catch((error) => {
-      const credential = GoogleAuthProvider.credentialFromError(error);
       dispatchAction(cb, SIGNUP_FAIL, error);
     });
 };

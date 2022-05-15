@@ -1,6 +1,8 @@
 import "./_formLogin.styles.scss";
 import { Backdrop } from "@mui/material";
 import { CircularProgress } from "@mui/material";
+import { FaFacebookF } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -99,13 +101,13 @@ const FormLogin = () => {
           className="form-button facebook-login"
           onClick={handleClickFacebookSignUp}
         >
-          Login with Facebook
+          <FaFacebookF /> Login with Facebook
         </button>
         <button
           className="form-button google-login"
           onClick={handleClickGoogleSignup}
         >
-          Login with Google
+          <FcGoogle /> Login with Google
         </button>
       </div>
       <p className="form-link">

@@ -13,7 +13,6 @@ import {
   getProfilePhotoURL,
   imageDirectory,
   logout,
-  updateProfileImage,
   updateUserEmail,
   updateUserDisplayName,
   updateUserPhotoURL,
@@ -21,7 +20,7 @@ import {
 
 import FormInput from "../form-input/FormInput.component";
 import AlertMessage from "../alertMessage/AlertMessage.component";
-import { SliderValueLabelUnstyled } from "@mui/base";
+import defaultProfileImage from "../../assets/images/profileIcon.png";
 
 const Dashboard = () => {
   const [edit, setEdit] = useState(false);
@@ -37,7 +36,7 @@ const Dashboard = () => {
     setValues({
       username: user.displayName,
       email: user.email,
-      photoURL: user.photoURL || "../../assets/images/profileIcon.png",
+      photoURL: user.photoURL === null ? user.photoURL : defaultProfileImage,
     });
   }, []);
 
@@ -104,8 +103,6 @@ const Dashboard = () => {
     );
     setPhotoFile(e.target.files[0]);
     setValues({ ...values, photoURL: newPhotoURL });
-
-    // console.log(values.photoURL);
   };
 
   const handleUserNameChange = (e) => {
@@ -123,7 +120,11 @@ const Dashboard = () => {
     return (
       <>
         <div className="dashboard-profile" id="avatar-container">
-          <img className="avatar" src={user.photoURL} alt="avatar" />
+          <img
+            className="avatar"
+            src={!user.photoURL ? defaultProfileImage : user.photoURL}
+            alt="avatar"
+          />
         </div>
         <div className="dashboard-profile">
           <p>User Name:</p>
@@ -185,7 +186,10 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {console.log("user photo", user.photoURL)}
+      {console.log("user", user)}
       <h2 className="dashboard-header">Dashboard</h2>
+      <hr />
       {!edit && state.updateError && (
         <AlertMessage message={state.updateError} />
       )}

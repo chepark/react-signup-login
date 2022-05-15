@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# React Sign Up and Log In
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <img width="460" height="300" src="./assets/demo.gif">
+</p>
 
-## Available Scripts
+## ⚙️ Features
 
-In the project directory, you can run:
+**[Sign Up]**
 
-### `npm start`
+- A user can create an account in three ways: using email and password, Facebook account, and Google account.
+- Once the sign up is done successfully, the user data (email, username) are saved in Firebase Firestore.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**[Log In]**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- A user
 
-### `npm test`
+**[Dashboard]**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- A user is able to change his/her user name, email address, or profile photo.
 
-### `npm run build`
+## 📌 Lessons from the project
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Different usage of Flex and Grid in CSS.
+- Building own hooks in React.
+- Using Portals in React to create Modals.
+- Using Framer Motion for animation effects.
+- Deploying the project with Netlify
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 👩🏻‍🔧 Future Improvement
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Improve the image loading speed in the slide page.
+- Change css media query code into scss.
+- Edit some styles on the slide page for a large screen (width > 1300px). Lower the progress bar Y position.
 
-### `npm run eject`
+## 💻 Technologies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- SCSS
+- React
+- Firebase
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🔨 Set up
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Download and install Git
+- `> git clone https://github.com/chepark/galleria.git`
+- `> cd galleria`
+- `> npm install`
+- `> npm start`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🔗 Link
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+https://soft-pothos-04baa8.netlify.app

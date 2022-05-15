@@ -1,8 +1,7 @@
 @import "../../styles/variables.scss";
 
 .dashboard-container {
-  border: 1px solid green;
-  width: 30vw;
+  width: 450px;
   min-width: 300px;
   margin: auto;
 
@@ -26,6 +25,14 @@
     background-color: $color-primary;
     color: $font-color-white;
   }
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  border-width: 0;
+  background-color: black;
+  margin-bottom: 2rem;
 }
 
 .dashboard-header {
