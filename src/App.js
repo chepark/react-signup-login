@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { auth } from "./firebase/firebase.config";
@@ -10,7 +10,6 @@ import FormLogin from "./components/form-login/FormLogin.component";
 import Dashboard from "./components/dashboard/Dashboard.component";
 import Logout from "./components/logout/Logout.component";
 import PrivateRoute from "./components/PrivateRoute";
-import { getUserByEmail } from "./api";
 
 function App() {
   useEffect(() => {

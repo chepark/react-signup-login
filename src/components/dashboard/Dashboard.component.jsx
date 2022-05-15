@@ -36,7 +36,8 @@ const Dashboard = () => {
     setValues({
       username: user.displayName,
       email: user.email,
-      photoURL: user.photoURL === null ? user.photoURL : defaultProfileImage,
+      photoURL: user.photoURL,
+      // photoURL: user.photoURL === null ? user.photoURL : defaultProfileImage,
     });
   }, []);
 
@@ -186,8 +187,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {console.log("user photo", user.photoURL)}
-      {console.log("user", user)}
       <h2 className="dashboard-header">Dashboard</h2>
       <hr />
       {!edit && state.updateError && (

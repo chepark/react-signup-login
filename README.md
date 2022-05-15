@@ -8,30 +8,29 @@
 
 **[Sign Up]**
 
-- A user can create an account in three ways: using email and password, Facebook account, and Google account.
-- Once the sign up is done successfully, the user data (email, username) are saved in Firebase Firestore.
+- A user can create an account in three different ways: using own email, Facebook account, or Google account.
+- Once sign up is completed, user data (email, username) are saved in Firebase Firestore.
+- Any falsy values on the inputs can be detected and show an alert message if there are any errors.
 
 **[Log In]**
 
-- A user
+- A user can log in with email, Facbook account, or Google account.
+- If email does not exist, an alert message is shown.
 
 **[Dashboard]**
 
 - A user is able to change his/her user name, email address, or profile photo.
+- If a user changes and saves data, they are updated on Firestore and Storage accordingly.
 
 ## 📌 Lessons from the project
 
-- Different usage of Flex and Grid in CSS.
-- Building own hooks in React.
-- Using Portals in React to create Modals.
-- Using Framer Motion for animation effects.
-- Deploying the project with Netlify
+- Learned how to implement CRUD application in React with Firebase Web SDK.
+- Understood set ups to use React Context.
+- Set up routings with React Router.
 
 ## 👩🏻‍🔧 Future Improvement
 
-- Improve the image loading speed in the slide page.
-- Change css media query code into scss.
-- Edit some styles on the slide page for a large screen (width > 1300px). Lower the progress bar Y position.
+- Organize codes by reducing repetitive codes especially on Dashboard component.
 
 ## 💻 Technologies
 
@@ -42,11 +41,6 @@
 ## 🔨 Set up
 
 - Download and install Git
-- `> git clone https://github.com/chepark/galleria.git`
-- `> cd galleria`
+- `> git clone https://github.com/chepark/react-signup-login.git`
 - `> npm install`
 - `> npm start`
-
-## 🔗 Link
-
-https://soft-pothos-04baa8.netlify.app
